@@ -4,7 +4,7 @@ const { WebClient } = require('@slack/client');
 const slackEvents = slackEventsApi.createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN, { includeBody: true });
 
 slackEvents.on('message', (message, body) => {
-  if (!message.subtype && message.text.indexOf('hi') >= 0) {
+  if (!message.subtype && message.text === 'hi') {
     const slack = new WebClient(process.env.SAPPHIRE_OAUTH_TOKEN);
     
     if (slack) {
