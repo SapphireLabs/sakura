@@ -35,6 +35,13 @@ class MALClient extends AbstractAnimeDataSource {
     }
 
     _constructAnimeModel(animeResponse) {
+        try {
+            const title = animeResponse.title;
+            const score = animeResponse.score;
+        } catch(err) {
+            throw "Malformed response from MyAnimeList: " . animeResponse.toString();
+        }
+        
         return new Anime(animeResponse.title, animeResponse.score); 
     }
 }
