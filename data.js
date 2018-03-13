@@ -28,7 +28,7 @@ class MALClient extends AbstractAnimeDataSource {
             this._client.searchAnimes(name)
                 .then(response => {
                     const result = response.shift();
-                    resolve(resolve === null ? result : this._constructAnimeModel(result));
+                    resolve(result === null ? result : this._constructAnimeModel(result));
                 })
                 .catch(err => reject(err));
         });
