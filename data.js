@@ -1,4 +1,5 @@
 const popura = require('popura');
+const _ = require('lodash');
  
 class AbstractAnimeDataSource {
     getAnime(name) {
@@ -11,9 +12,19 @@ class AbstractAnimeDataSource {
 }
 
 class Anime {
-    constructor(name, score) {
-        this.name = name;
-        this.score = score;
+    constructor(params) {
+        this._validateParams(params);
+        
+        this.name = params.name;
+        this.score = params.score || null;
+        this.image = params.image || null;
+        this.description = params.description || null;
+    }
+
+    _validateParams(params) {
+        if(_.isNil(params.name) || _.isEmpty(params.name)) {
+            throw "Anime Creation Error: invalid name";
+        }
     }
 }
 
@@ -35,14 +46,12 @@ class MALClient extends AbstractAnimeDataSource {
     }
 
     _constructAnimeModel(animeResponse) {
-        const title = animeResponse.title || null;
-        const score = animeResponse.score || null;
-
-        if(title === null || score === null) {
-            throw "Malformed response from MyAnimeList: " . animeResponse.toString();
-        }
-        
-        return new Anime(animeResponse.title, animeResponse.score); 
+        return new Anime({
+            name: animeResponse.title,
+            score: animeResponse.score,
+            image: animeResponse.image,
+            description: animeResponse.synopsis
+        }); 
     }
 }
 
