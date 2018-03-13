@@ -48,4 +48,6 @@ class MALClient extends AbstractAnimeDataSource {
 
 const mal = new MALClient(popura(process.env.MAL_USERNAME, process.env.MAL_PASSWORD));
 
-module.exports = mal;
+module.exports = {
+    MyAnimeList: mal
+};
