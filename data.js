@@ -1,5 +1,6 @@
 const popura = require('popura');
 const _ = require('lodash');
+const Entities = require('html-entities').AllHtmlEntities;
  
 class AbstractAnimeDataSource {
     getAnime(name) {
@@ -26,12 +27,28 @@ class Anime {
             throw "Anime Creation Error: invalid name";
         }
     }
+
+    buildSlackResponse(channel) {
+       return {
+           channel,
+           attachments: [
+             {
+                 pretext: `${this.name} is rated ${this.score}/10`,
+                 image_url: this.image
+             },
+             {
+                 text: this.description
+             }
+           ]
+       };
+    }
 }
 
 class MALClient extends AbstractAnimeDataSource {
     constructor(popuraClient) {
         super();
         this._client = popuraClient;
+        this.entities = new Entities();
     }
 
     getAnime(name) {
@@ -47,10 +64,10 @@ class MALClient extends AbstractAnimeDataSource {
 
     _constructAnimeModel(animeResponse) {
         return new Anime({
-            name: animeResponse.title,
+            name: this.entities.decode(animeResponse.title),
             score: animeResponse.score,
             image: animeResponse.image,
-            description: animeResponse.synopsis
+            description: this.entities.decode(animeResponse.synopsis)
         }); 
     }
 }

@@ -1,4 +1,5 @@
 const slackEventsApi = require('@slack/events-api');
+const { MyAnimeList } = require('./data');
 const { BOT_ID } = require('./util/constants');
 
 /**
@@ -19,26 +20,16 @@ class SlackClient {
    * @private
    */
   _setupListeners() {
-    this.events.on('message', (message, body) => {
-      console.log(message);
-      console.log(body);
-    });
-
     this.events.on('app_mention', (message, body) => {
       // Only respond to messages that have no subtype (plain messages)
       if (!message.subtype) {
         const search = this._extractSearchText(message.text);
 
         if (!search) {
-          this._postMessage(
-            message.channel,
-            'Invalid search: try "@Sakura <Insert Anime Name>"'
-          );
+          this._postMessage(message.channel, 'Invalid search: try "@Sakura <Insert Anime Name>"');
         } else {
-          this._postMessage(
-            message.channel,
-            `Searching for anime "${search}"...`
-          );
+          this._postMessage(message.channel, `Searching for anime "${search}"...`);
+          this._searchAnime(message.channel, search);
         }
       }
     });
@@ -73,6 +64,22 @@ class SlackClient {
 
   /**
    * @param {string} channel
+   * @param {string} title
+   * @private
+   */
+  _searchAnime(channel, title) {
+    MyAnimeList.getAnime(title)
+      .then(response => response ?
+        this.slack.chat.postMessage(response.buildSlackResponse(channel)) :
+        this._postMessage(channel, `Did not find anime with title "${title}"`)
+      )
+      .catch(err => {
+        throw new Error(`Search Anime Error: ${err}`);
+      });
+  }
+
+  /**
+   * @param {string} channel
    * @param {string} text
    * @private
    */
@@ -81,7 +88,9 @@ class SlackClient {
       channel,
       text,
     })
-      .catch(console.error);
+      .catch(err => {
+        throw new Error(`Slack Post Message Error: ${err}`);
+      });
   }
 }
 
