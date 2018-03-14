@@ -1,7 +1,7 @@
 const popura = require('popura');
 const _ = require('lodash');
 const Entities = require('html-entities').AllHtmlEntities;
- 
+
 class AbstractAnimeDataSource {
     getAnime(name) {
         throw "Implementation error";
@@ -26,21 +26,6 @@ class Anime {
         if(_.isNil(params.name) || _.isEmpty(params.name)) {
             throw "Anime Creation Error: invalid name";
         }
-    }
-
-    buildSlackResponse(channel) {
-       return {
-           channel,
-           attachments: [
-             {
-                 pretext: `${this.name} is rated ${this.score}/10`,
-                 image_url: this.image
-             },
-             {
-                 text: this.description
-             }
-           ]
-       };
     }
 }
 

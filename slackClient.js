@@ -1,4 +1,5 @@
 const slackEventsApi = require('@slack/events-api');
+const Entities = require('html-entities').AllHtmlEntities;
 const { MyAnimeList } = require('./data');
 const { BOT_ID } = require('./util/constants');
 
@@ -70,12 +71,33 @@ class SlackClient {
   _searchAnime(channel, title) {
     MyAnimeList.getAnime(title)
       .then(response => response ?
-        this.slack.chat.postMessage(response.buildSlackResponse(channel)) :
+        this.slack.chat.postMessage(this._buildAnimeSlackResponse(channel, response)) :
         this._postMessage(channel, `Did not find anime with title "${title}"`)
       )
       .catch(err => {
         throw new Error(`Search Anime Error: ${err}`);
       });
+  }
+
+  /**
+   * @param {string} channel
+   * @param {Anime} anime
+   * @returns {{channel: *, attachments: *[]}}
+   * @private
+   */
+  _buildAnimeSlackResponse(channel, anime) {
+    return {
+      channel,
+      attachments: [
+        {
+          pretext: `${anime.name} is rated ${anime.score}/10`,
+          image_url: anime.image
+        },
+        {
+          text: anime.description
+        }
+      ]
+    };
   }
 
   /**
