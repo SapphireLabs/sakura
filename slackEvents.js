@@ -1,18 +1,23 @@
+'use strict';
+
 const slackEventsApi = require('@slack/events-api');
 const { WebClient } = require('@slack/client');
 
 const slackEvents = slackEventsApi.createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN, { includeBody: true });
 
-slackEvents.on('message', (message, body) => {
-  if (!message.subtype && message.text === 'hi') {
+slackEvents.on('app_mention', (message, body) => {
+  // Only respond to messages that have no subtype (plain messages)
+  if (!message.subtype) {
     const slack = new WebClient(process.env.SAPPHIRE_OAUTH_TOKEN);
     
     if (slack) {
-      slack.chat.postMessage({ 
-        channel: message.channel, 
-        text: `B-b-baka <@${message.user}>! :blushkek:` 
-      })
-        .catch(console.error);
+      if (message.text.indexOf('hi') >= 0) {
+        slack.chat.postMessage({ 
+          channel: message.channel, 
+          text: `B-b-baka <@${message.user}>! :blushkek:` 
+        })
+          .catch(console.error);
+      }
     }
   }
 });

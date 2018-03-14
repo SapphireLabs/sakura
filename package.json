@@ -4,6 +4,7 @@
   "description": "Weeb bot",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,5 +26,8 @@
     "express": "^4.16.2",
     "lodash": "^4.17.5",
     "popura": "^1.2.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2"
   }
 }
