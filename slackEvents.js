@@ -1,33 +1,37 @@
-'use strict';
-
 const slackEventsApi = require('@slack/events-api');
-const { WebClient } = require('@slack/client');
+const { MyAnimeList } = require('./data');
 
-const slackEvents = slackEventsApi.createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN, { includeBody: true });
+module.exports = {
+  registerEvents: (slackClient) => {
+      slackClient.onEvent('app_mention', (message) => {
+        // Only respond to messages that have no subtype (plain messages)
+        if (!message.subtype) {
+          const title = slackClient.extractSearchText(message.text);
 
-slackEvents.on('app_mention', (message, body) => {
-  // Only respond to messages that have no subtype (plain messages)
-  if (!message.subtype) {
-    const slack = new WebClient(process.env.SAPPHIRE_OAUTH_TOKEN);
-    
-    if (slack) {
-      if (message.text.indexOf('hi') >= 0) {
-        slack.chat.postMessage({ 
-          channel: message.channel, 
-          text: `B-b-baka <@${message.user}>! :blushkek:` 
-        })
-          .catch(console.error);
-      }
+          if (!title) {
+            slackClient.postMessage(message.channel, 'Invalid search: try "@Sakura <Insert Anime Name>"');
+          } else {
+            slackClient.postMessage(message.channel, `Searching for anime "${title}"...`);
+
+            MyAnimeList.getAnime(title)
+              .then(response => response ?
+                slackClient.postMessage(message.channel, '', response.formatForSlack()) :
+                slackClient.postMessage(message.channel, `Did not find anime with title "${title}"`)
+              )
+              .catch(err => {
+                throw new Error(`Search Anime Error: ${err}`);
+              });
+          }
+        }
+      });
+
+      slackClient.onEvent('error', (error) => {
+        if (error.code === slackEventsApi.errorCodes.TOKEN_VERIFICATION_FAILURE) {
+          console.error(`An unverified request was sent to the Slack events Request URL. Request body: ${JSON.stringify(error.body)}`);
+        } else {
+          console.error(`An error occurred while handling a Slack event: ${error.message}`);
+        }
+      });
     }
-  }
-});
+};
 
-slackEvents.on('error', (error) => {
-  if (error.code === slackEventsApi.errorCodes.TOKEN_VERIFICATION_FAILURE) {
-    console.error(`An unverified request was sent to the Slack events Request URL. Request body: ${JSON.stringify(error.body)}`);
-  } else {
-    console.error(`An error occurred while handling a Slack event: ${error.message}`);
-  }
-});
-
-module.exports = slackEvents;
