@@ -53,15 +53,12 @@ class SlackClient {
    * @param {string} text
    * @param {Object} options
    */
-  postMessage(channel, text, options) {
-    this.slack.chat.postMessage({
-      channel,
-      text,
-      ...options
-    })
-      .catch(err => {
-        throw new Error(`Slack Post Message Error: ${err}`);
-      });
+  async postMessage(channel, text, options) {
+    try {
+      await this.slack.chat.postMessage({ channel, text, ...options })
+    } catch (err) {
+      throw new Error(`Slack Post Message Error: ${err}`);
+    }
   }
 }
 
