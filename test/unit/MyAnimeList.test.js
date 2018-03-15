@@ -10,16 +10,13 @@ const popura = require('popura');
 
 describe('MyAnimeList', function() {
     describe('#getAnime()', function() {
+        const animeName = 'Code Geass';
+
         it('should return an Anime Model', sinonTest(function(done) {
-            const animeName = "Code Geass";
-            const popuraClient = popura('USERNAME', 'PASSWORD');
-            const searchAnimesStub = sinon.stub(popuraClient, 'searchAnimes');
             const payloadPath = path.join(__dirname, '../', 'stubs', 'myanimelist-getanime.json');
-            const payload = JSON.parse(fs.readFileSync(payloadPath, 'utf8'));
+            const searchAnimePayload = JSON.parse(fs.readFileSync(payloadPath, 'utf8'));
 
-            searchAnimesStub.withArgs(animeName).onFirstCall().resolves(payload);
-
-            new MyAnimeList(popuraClient)
+            new MyAnimeList(createPopuraStub(animeName, searchAnimePayload))
                 .getAnime(animeName)
                 .then(function(animeModel) {
                     assert.instanceOf(animeModel, Anime);
@@ -29,13 +26,9 @@ describe('MyAnimeList', function() {
         }));
 
         it('should return null when nothing is found', sinonTest(function(done) {
-            const animeName = "Code Geass";
-            const popuraClient = popura('USERNAME', 'PASSWORD');
-            const searchAnimesStub = sinon.stub(popuraClient, 'searchAnimes');
+            const searchAnimePayload = [null];
 
-            searchAnimesStub.withArgs(animeName).onFirstCall().resolves([null]);
-
-            new MyAnimeList(popuraClient)
+            new MyAnimeList(createPopuraStub(animeName, searchAnimePayload))
                 .getAnime(animeName)
                 .then(function(animeModel) {
                     assert.isNull(animeModel);
@@ -44,5 +37,15 @@ describe('MyAnimeList', function() {
                 .catch(done);
         }));
     });
-    
 });
+
+function createPopuraStub(animeName, stubResponse) {
+    const popuraClient = popura('USERNAME', 'PASSWORD');
+    const searchAnimesStub = sinon
+        .stub(popuraClient, 'searchAnimes')
+        .withArgs(animeName)
+        .onFirstCall()
+        .resolves(stubResponse);
+
+    return popuraClient;
+}
