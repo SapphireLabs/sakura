@@ -26,9 +26,7 @@ describe('MyAnimeList', function() {
         }));
 
         it('should return null when nothing is found', sinonTest(function(done) {
-            const searchAnimePayload = [null];
-
-            new MyAnimeList(createPopuraStub(animeName, searchAnimePayload))
+            new MyAnimeList(createPopuraStub(animeName))
                 .getAnime(animeName)
                 .then(function(animeModel) {
                     assert.isNull(animeModel);
@@ -39,7 +37,7 @@ describe('MyAnimeList', function() {
     });
 });
 
-function createPopuraStub(animeName, stubResponse) {
+function createPopuraStub(animeName = "ANIME_NAME", stubResponse = [null]) {
     const popuraClient = popura('USERNAME', 'PASSWORD');
     const searchAnimesStub = sinon
         .stub(popuraClient, 'searchAnimes')
