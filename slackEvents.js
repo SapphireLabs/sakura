@@ -3,7 +3,7 @@ const { MyAnimeList } = require('./data');
 
 module.exports = {
   registerEvents: (slackClient) => {
-      slackClient.onEvent('app_mention', (message) => {
+      slackClient.onEvent('app_mention', async (message) => {
         // Only respond to messages that have no subtype (plain messages)
         if (!message.subtype) {
           const title = slackClient.extractSearchText(message.text);
@@ -13,14 +13,13 @@ module.exports = {
           } else {
             slackClient.postMessage(message.channel, `Searching for anime "${title}"...`);
 
-            MyAnimeList.getAnime(title)
-              .then(response => response ?
-                slackClient.postMessage(message.channel, '', response.formatForSlack()) :
-                slackClient.postMessage(message.channel, `Did not find anime with title "${title}"`)
-              )
-              .catch(err => {
-                throw new Error(`Search Anime Error: ${err}`);
-              });
+            const anime = await MyAnimeList.getAnime(title);
+
+            if (anime) {
+              slackClient.postMessage(message.channel, '', anime.formatForSlack());
+            } else {
+              slackClient.postMessage(message.channel, `Did not find anime with title "${title}"`);
+            }
           }
         }
       });
