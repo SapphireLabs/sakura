@@ -13,16 +13,12 @@ module.exports = {
           } else {
             slackClient.postMessage(message.channel, `Searching for anime "${title}"...`);
 
-            try {
-              const anime = await MyAnimeList.getAnime(title);
+            const anime = await MyAnimeList.getAnime(title);
 
-              if (anime) {
-                slackClient.postMessage(message.channel, '', anime.formatForSlack());
-              } else {
-                slackClient.postMessage(message.channel, `Did not find anime with title "${title}"`);
-              }
-            } catch (err) {
-              throw new Error(`Search Anime Error: ${err}`);
+            if (anime) {
+              slackClient.postMessage(message.channel, '', anime.formatForSlack());
+            } else {
+              slackClient.postMessage(message.channel, `Did not find anime with title "${title}"`);
             }
           }
         }
