@@ -7,15 +7,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const slackEventsApi = require('@slack/events-api');
 const { WebClient } = require('@slack/client');
+
 const SlackClient = require('./slackClient');
+const slackEvents = require('./slackEvents');
 
-const slackEvents = slackEventsApi.createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN, { includeBody: true });
+const slackEventsAdapter = slackEventsApi.createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN, { includeBody: true });
 const slackWebClient = new WebClient(process.env.SLACK_TEAM_OAUTH_TOKEN);
+const slackClient = new SlackClient(slackEventsAdapter, slackWebClient);
 
-const slackClient = new SlackClient({
-  slackEvents,
-  slackWebClient
-});
+slackEvents(slackClient);
 
 const port = process.env.APP_PORT || 3000;
 const app = express();

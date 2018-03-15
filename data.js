@@ -30,10 +30,10 @@ class Anime {
 }
 
 class MALClient extends AbstractAnimeDataSource {
-    constructor(popuraClient) {
+    constructor(popuraClient, entities) {
         super();
         this._client = popuraClient;
-        this.entities = new Entities();
+        this._entities = entities;
     }
 
     getAnime(name) {
@@ -49,15 +49,15 @@ class MALClient extends AbstractAnimeDataSource {
 
     _constructAnimeModel(animeResponse) {
         return new Anime({
-            name: this.entities.decode(animeResponse.title),
+            name: this._entities.decode(animeResponse.title),
             score: animeResponse.score,
             image: animeResponse.image,
-            description: this.entities.decode(animeResponse.synopsis)
+            description: this._entities.decode(animeResponse.synopsis)
         }); 
     }
 }
 
-const mal = new MALClient(popura(process.env.MAL_USERNAME, process.env.MAL_PASSWORD));
+const mal = new MALClient(popura(process.env.MAL_USERNAME, process.env.MAL_PASSWORD), new Entities());
 
 module.exports = {
     MyAnimeList: mal
