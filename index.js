@@ -9,13 +9,13 @@ const slackEventsApi = require('@slack/events-api');
 const { WebClient } = require('@slack/client');
 
 const SlackClient = require('./slackClient');
-const slackEvents = require('./slackEvents');
+const { registerEvents } = require('./slackEvents');
 
 const slackEventsAdapter = slackEventsApi.createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN, { includeBody: true });
 const slackWebClient = new WebClient(process.env.SLACK_TEAM_OAUTH_TOKEN);
 const slackClient = new SlackClient(slackEventsAdapter, slackWebClient);
 
-slackEvents(slackClient);
+registerEvents(slackClient);
 
 const port = process.env.APP_PORT || 3000;
 const app = express();

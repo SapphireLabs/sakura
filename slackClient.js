@@ -8,8 +8,16 @@ class SlackClient {
    * @param {Object} params
    */
   constructor(slackEventsAdapter, slackWebClient) {
-    this.events = slackEventsAdapter;
-    this.slack = slackWebClient;
+    this._events = slackEventsAdapter;
+    this._slack = slackWebClient;
+  }
+
+  get events() {
+    return this._events;
+  }
+
+  get slack() {
+    return this._slack;
   }
 
   /**
@@ -54,27 +62,6 @@ class SlackClient {
       .catch(err => {
         throw new Error(`Slack Post Message Error: ${err}`);
       });
-  }
-
-  /**
-   * Formats anime object for slack chat postMessage format
-   *
-   * @param {Anime} anime
-   * @returns {{attachments: *[]}}
-   */
-  buildAnimeSlackMessage(anime) {
-    return {
-      text: `${anime.name}`,
-      attachments: [
-        {
-          pretext: `${anime.name} is rated ${anime.score}/10`,
-          image_url: anime.image
-        },
-        {
-          text: anime.description
-        }
-      ]
-    };
   }
 }
 

@@ -27,6 +27,27 @@ class Anime {
             throw "Anime Creation Error: invalid name";
         }
     }
+
+    /**
+     * Formats an anime object for slack post message
+     *
+     * @param {Anime} anime
+     * @returns {{text: string, attachments: *[]}}
+     */
+    formatForSlack() {
+      return {
+        text: `${this.name}`,
+        attachments: [
+          {
+            pretext: `${this.name} is rated ${this.score}/10`,
+            image_url: this.image
+          },
+          {
+            text: this.description
+          }
+        ]
+      };
+    }
 }
 
 class MALClient extends AbstractAnimeDataSource {
@@ -36,9 +57,17 @@ class MALClient extends AbstractAnimeDataSource {
         this._entities = entities;
     }
 
+    get client() {
+        return this._client;
+    }
+
+    get entities() {
+        return this._entities;
+    }
+
     getAnime(name) {
         return new Promise((resolve, reject) => {
-            this._client.searchAnimes(name)
+            this.client.searchAnimes(name)
                 .then(response => {
                     const result = response.shift();
                     resolve(result === null ? result : this._constructAnimeModel(result));
@@ -49,10 +78,10 @@ class MALClient extends AbstractAnimeDataSource {
 
     _constructAnimeModel(animeResponse) {
         return new Anime({
-            name: this._entities.decode(animeResponse.title),
+            name: this.entities.decode(animeResponse.title),
             score: animeResponse.score,
             image: animeResponse.image,
-            description: this._entities.decode(animeResponse.synopsis)
+            description: this.entities.decode(animeResponse.synopsis)
         }); 
     }
 }
