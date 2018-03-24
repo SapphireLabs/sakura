@@ -1,5 +1,6 @@
 const slackEventsApi = require('@slack/events-api');
 const { MyAnimeList } = require('./data');
+const malClient = new MyAnimeList(popura(process.env.MAL_USERNAME, process.env.MAL_PASSWORD), new Entities());
 
 module.exports = {
   registerEvents: (slackClient) => {
@@ -13,7 +14,7 @@ module.exports = {
           } else {
             slackClient.postMessage(message.channel, `Searching for anime "${title}"...`);
 
-            const anime = await MyAnimeList.getAnime(title);
+            const anime = await malClient.getAnime(title);
 
             if (anime) {
               slackClient.postMessage(message.channel, '', anime.formatForSlack());
