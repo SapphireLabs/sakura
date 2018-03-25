@@ -3,8 +3,23 @@ services:
   web:
     build: .
     volumes:
-      - .:/usr/app/src
+      - .:/usr/src/app
     ports:
-      - 21005:80
+      - 20005:80
     environment:
       - APP_ENV:local
+    links:
+      - db
+
+  db: 
+    image: mysql:latest
+    command: --disable-partition-engine-check
+    volumes:
+      - ./db/data:/var/lib/mysql
+    ports:
+      - 20006:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sakura
+      MYSQL_USER: sakura
+      MYSQL_PASSWORD: sakura

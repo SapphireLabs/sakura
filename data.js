@@ -1,6 +1,4 @@
-const popura = require('popura');
 const _ = require('lodash');
-const Entities = require('html-entities').AllHtmlEntities;
 
 class AbstractAnimeDataSource {
     getAnime(name) {
