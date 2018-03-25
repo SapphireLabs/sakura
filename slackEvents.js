@@ -1,5 +1,7 @@
 const slackEventsApi = require('@slack/events-api');
 const { MyAnimeList } = require('./data');
+const Entities = require('html-entities').AllHtmlEntities;
+const popura = require('popura');
 const malClient = new MyAnimeList(popura(process.env.MAL_USERNAME, process.env.MAL_PASSWORD), new Entities());
 
 module.exports = {
