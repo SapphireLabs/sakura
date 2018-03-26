@@ -17,6 +17,7 @@ Once you have the docker-compose running, you can connect to the database via
 ```
 IP:         127.0.0.1
 PORT:       20006
+DATABASE:   sakura
 USERNAME:   sakura
 PASSWORD:   sakura
 ```
