@@ -1,0 +1,23 @@
+{
+  "development": {
+     "username": "sakura",
+     "password": "sakura",
+     "database": "sakura",
+     "host": "db",
+     "dialect": "mysql"
+  },
+  "test": {
+     "username": "sakura_test",
+     "password": "sakura_test",
+     "database": "sakura_test",
+     "host": "db_test",
+     "dialect": "mysql"
+  },
+  "production": {
+    "username": "sakura",
+    "password": "sakura",
+    "database": "sakura",
+    "host": "db",
+    "dialect": "mysql"
+ }
+}
