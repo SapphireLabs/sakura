@@ -1,16 +1,25 @@
 'use strict';
 
-// TODO: sync this with the migration file
 module.exports = (sequelize, DataTypes) => {
-  var Anime = sequelize.define('Anime', {
+  const Anime = sequelize.define('Anime', {
     name: DataTypes.STRING,
-    mal_id: DataTypes.INTEGER,
+    mal_id: {
+      type: DataTypes.INTEGER,
+    },
+    producer_id: {
+      type: DataTypes.INTEGER,
+    },
     synopsis: DataTypes.TEXT,
-    start_date: DataTypes.DATE,
-    end_date: DataTypes.DATE
+    start_date: DataTypes.DATEONLY,
+    end_date: DataTypes.DATEONLY,
+    created_at: DataTypes.DATE,
+    updated_at: DataTypes.DATE,
   }, {});
+  
   Anime.associate = function(models) {
-    // associations can be defined here
+    Anime.belongsTo(models.MyAnimeListAnimes);
+    Anime.belongsTo(models.Producers);
   };
+  
   return Anime;
 };

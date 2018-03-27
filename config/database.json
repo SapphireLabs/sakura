@@ -3,8 +3,9 @@
      "username": "sakura",
      "password": "sakura",
      "database": "sakura",
-     "host": "db",
-     "dialect": "mysql"
+     "host": "127.0.0.1",
+     "dialect": "mysql",
+     "port": 20006
   },
   "test": {
      "username": "sakura_test",
