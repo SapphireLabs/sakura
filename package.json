@@ -6,9 +6,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "./node_modules/mocha/bin/mocha --recursive",
-    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
-    "db:drop": "./node_modules/.bin/sequelize db:drop"
+    "test": "./node_modules/mocha/bin/mocha --recursive"
   },
   "repository": {
     "type": "git",
