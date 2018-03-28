@@ -33,7 +33,6 @@ module.exports = {
           bulk100Counter = 0;
         }
       }
-      console.log("pushed - " + fileName);
     }
     
     return Promise.all(animeRecordsToInsert.map(d => {
