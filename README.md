@@ -41,4 +41,13 @@ npm run test
 ```
 
 ## Deployment
-TBD
+1. [Install the AWS Elastic Beanstalk Command Line Interface (CLI)](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
+2. Create an IAM Instance Profile. For more information on how to create an IAM Instance Profile, see [Create an IAM Instance Profile for Your Amazon EC2 Instances](https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-create-iam-instance-profile.html).
+3. Copy `.ebextensions/env.config.example` to `.ebextensions/env.config`. You can either fill in those values there or deploy then change them in the AWS console.  Do not commit your env details! `env.config` is already gitignored.
+3. Run `eb init` to initialize the folder for use with the CLI.  Follow the instructions, making sure to confirm the prompt that you are using Docker.  Code Commit and ssh are optional.
+4. Run `eb create` to begin the creation of your environment.
+5. Once the environment creation process completes, run `eb open` to open the application in a browser.
+6. Run `eb terminate --all` to clean up.
+
+Notes: Make sure you have a default VPC and that your security group has access to port 3000.
+
