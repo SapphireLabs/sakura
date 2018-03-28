@@ -15,14 +15,12 @@ docker-compose up
 Install `sequelize-cli` using `npm install --global sequelize-cli`. Alternatively, you can use 
 `./node_modules/.bin/sequelize`. It will provide you a list of options.
 
-Create a migration example:
+Typical dev workflow if your db is messed up
 ```
-./node_modules/.bin/sequelize migration:generate --name=SampleMigration
-```
-
-Run all db migrations:
-```
-./node_modules/.bin/sequelize db:migrate
+sequelize db:drop
+sequelize db:create
+sequelize db:migrate
+sequelize db:seed:all   // Run all seeders
 ```
 
 ## Connecting to the dev database
