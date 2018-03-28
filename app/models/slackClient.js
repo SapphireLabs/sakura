@@ -1,4 +1,4 @@
-const { BOT_ID } = require('./util/constants');
+const { BOT_ID } = require('../../util/constants');
 
 /**
  * Class that handles slack event subscription and post message responses
