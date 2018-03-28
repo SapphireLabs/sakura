@@ -17,7 +17,7 @@ const slackClient = new SlackClient(slackEventsAdapter, slackWebClient);
 
 registerEvents(slackClient);
 
-const port = process.env.APP_PORT || 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(bodyParser.json());
