@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   
   Anime.associate = function(models) {
-    Anime.belongsTo(models.MyAnimeListAnimes);
     Anime.belongsTo(models.Producers);
   };
   
