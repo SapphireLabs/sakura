@@ -12,16 +12,8 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      mal_id: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'myanimelist_animes',
-          key: 'id',
-        }
-      },
       producer_id: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
           model: 'producers',
@@ -31,6 +23,18 @@ module.exports = {
       synopsis: {
         allowNull: true,
         type: Sequelize.TEXT
+      },
+      episodes: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
+      mal_id: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      }, 
+      mal_rating: {
+        allowNull: true,
+        type: Sequelize.INTEGER
       },
       start_date: {
         allowNull: false,
@@ -49,7 +53,8 @@ module.exports = {
         type: Sequelize.DATE
       },
     }, {
-      indexes: [{ unique: true, fields: ['mal_id']}]
+      indexes: [{ unique: true, fields: ['mal_id']}],
+      charset: 'utf8'
     });
 
     return AnimeTableCreation;

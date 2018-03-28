@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER
       }, 
       avg_rating: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       created_at: {
@@ -27,7 +27,8 @@ module.exports = {
     }, {
       indexes: [
         {unique: true, fields: ['mal_id']}
-      ]
+      ],
+      charset: 'utf8'
     })
   },
   down: (queryInterface, Sequelize) => {

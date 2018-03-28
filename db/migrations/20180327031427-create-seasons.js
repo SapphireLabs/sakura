@@ -38,7 +38,8 @@ module.exports = {
         {
           fields: ['year', 'season']
         }
-      ]
+      ],
+      charset: 'utf8'
     });
 
     return Seasons;

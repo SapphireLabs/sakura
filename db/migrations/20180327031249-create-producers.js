@@ -34,7 +34,8 @@ module.exports = {
           unique: true,
           fields: ['name']
         }
-      ]
+      ],
+      charset: 'utf8'
     });
 
     return Producers;
