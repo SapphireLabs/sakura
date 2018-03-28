@@ -1,0 +1,24 @@
+{
+  "development": {
+     "username": "sakura",
+     "password": "sakura",
+     "database": "sakura",
+     "host": "127.0.0.1",
+     "dialect": "mysql",
+     "port": 20006
+  },
+  "test": {
+     "username": "sakura_test",
+     "password": "sakura_test",
+     "database": "sakura_test",
+     "host": "db_test",
+     "dialect": "mysql"
+  },
+  "production": {
+    "username": "sakura",
+    "password": "sakura",
+    "database": "sakura",
+    "host": "db",
+    "dialect": "mysql"
+ }
+}
