@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 module.exports = class Anime {
     constructor(params) {
         this._validateParams(params);
